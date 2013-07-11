@@ -28,13 +28,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
+
+import jxl.*;
+import jxl.read.biff.BiffException;
 
 public class Main extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtField_GradeBook;
-	private JTextField txtField_provincePath;
-	private JTable table_GradeBook;
 
 	/**
 	 * Launch the application.
@@ -100,15 +102,26 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		txtField_GradeBook = new JTextField();
-		txtField_GradeBook.setColumns(10);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+		final JPanel panel_gradeBook = new JPanel();
+		tabbedPane.addTab("GradeBook", null, panel_gradeBook, null);
+		
+		JPanel panel_Province = new JPanel();
+		tabbedPane.addTab("Province Employees", null, panel_Province, null);
+		
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("Comparison", null, panel, null);
 		
 		JButton btnBrowse_GradeBook = new JButton("Select GradeBook");
+		btnBrowse_GradeBook.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				LoadExcelFile xlFile = new LoadExcelFile("C:/Users/jorge.mori/Documents/test.xls", panel_gradeBook);
+			}
+		});
 		btnBrowse_GradeBook.setIcon(new ImageIcon(Main.class.getResource("/checker/resources/File explorer.png")));
 		btnBrowse_GradeBook.setFont(new Font("Verdana", Font.BOLD, 12));
-		
-		txtField_provincePath = new JTextField();
-		txtField_provincePath.setColumns(10);
 		
 		JButton btnBrowse_Province = new JButton("Select Province");
 		btnBrowse_Province.setIcon(new ImageIcon(Main.class.getResource("/checker/resources/File explorer.png")));
@@ -118,7 +131,7 @@ public class Main extends JFrame {
 		btnCompare.setFont(new Font("Verdana", Font.BOLD, 12));
 		btnCompare.setIcon(new ImageIcon(Main.class.getResource("/checker/resources/comparison.png")));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		//JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		JButton btnPrint = new JButton("Print");
 		btnPrint.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -144,16 +157,12 @@ public class Main extends JFrame {
 							.addPreferredGap(ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
 							.addComponent(btnEmail))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtField_GradeBook)
-								.addComponent(btnBrowse_GradeBook, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(48)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(txtField_provincePath)
-								.addComponent(btnBrowse_Province, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(18)
+							.addComponent(btnBrowse_GradeBook)
+							.addGap(37)
+							.addComponent(btnBrowse_Province)
+							.addGap(29)
 							.addComponent(btnCompare))
-						.addComponent(tabbedPane))
+						.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
 					.addGap(24))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -162,33 +171,27 @@ public class Main extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnBrowse_GradeBook)
-						.addComponent(btnBrowse_Province)
-						.addComponent(btnCompare))
-					.addGap(7)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtField_GradeBook, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtField_provincePath, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(btnCompare)
+						.addComponent(btnBrowse_Province))
+					.addGap(45)
 					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnPrint)
 						.addComponent(btnEmail)
 						.addComponent(btnDownload))
-					.addContainerGap(70, Short.MAX_VALUE))
+					.addContainerGap(12, Short.MAX_VALUE))
 		);
 		
-		JPanel panel_gradeBook = new JPanel();
-		tabbedPane.addTab("GradeBook", null, panel_gradeBook, null);
-		
-		table_GradeBook = new JTable();
-		panel_gradeBook.add(table_GradeBook);
-		
-		JPanel panel_Province = new JPanel();
-		tabbedPane.addTab("Province Employees", null, panel_Province, null);
-		
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Comparison", null, panel, null);
+//		JPanel panel_gradeBook = new JPanel();
+//		tabbedPane.addTab("GradeBook", null, panel_gradeBook, null);
+//		
+//		JPanel panel_Province = new JPanel();
+//		tabbedPane.addTab("Province Employees", null, panel_Province, null);
+//		
+//		JPanel panel = new JPanel();
+//		tabbedPane.addTab("Comparison", null, panel, null);
+
 		contentPane.setLayout(gl_contentPane);
 	}
 }
